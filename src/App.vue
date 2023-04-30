@@ -1,15 +1,26 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from 'vue-router'
 import { useCurrentUser, useFirebaseAuth } from 'vuefire'
+import { computed } from 'vue'
 import Link from './components/Link.vue'
+import { randomPastelHSLByStr } from '@/utils'
 
 const router = useRouter()
 const currentUser = useCurrentUser()
 const vuefireAuth = useFirebaseAuth()
 
+const userAvatarLetter = computed(() => {
+  const displayName = currentUser.value?.displayName
+  if (displayName)
+    return displayName[0]
+
+  return 'U'
+})
+
 function logout() {
-  vuefireAuth?.signOut()
-  router.push('/login')
+  vuefireAuth?.signOut().then(() => {
+    router.push('/login')
+  })
 }
 </script>
 
@@ -35,7 +46,12 @@ function logout() {
               <div v-if="currentUser" class="dropdown dropdown-end ml-auto">
                 <label tabindex="0" class="btn btn-ghost btn-circle avatar">
                   <div class="w-10 rounded-full">
-                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg">
+                    <span
+                      class="h-full text-white text-xl flex justify-center items-center"
+                      :style="{ 'background-color': randomPastelHSLByStr(currentUser.uid) }"
+                    >
+                      {{ userAvatarLetter }}
+                    </span>
                   </div>
                 </label>
                 <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-base-content">

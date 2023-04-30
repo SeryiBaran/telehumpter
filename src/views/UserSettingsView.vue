@@ -4,7 +4,7 @@
 
 <template>
   <div class="alert alert-info">
-    Тут можно будет менять аватарку o_O
+    Тут можно будет менять настройки
   </div>
 </template>
 

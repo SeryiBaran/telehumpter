@@ -2,9 +2,9 @@
 import { toast } from 'vue3-toastify'
 import { useField, useForm } from 'vee-validate'
 import * as yup from 'yup'
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth'
-import { useFirebaseAuth } from 'vuefire'
+import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 interface RegisterForm {
   email: string
@@ -39,17 +39,24 @@ useField('username')
 useField('password')
 useField('passwordRepeat')
 
+const router = useRouter()
+
 const isLoading = ref(false)
 
 const onSubmit = handleSubmit(async (values) => {
-  const vuefireAuth = useFirebaseAuth()
   const auth = getAuth()
   isLoading.value = true
   createUserWithEmailAndPassword(auth, values.email, values.password)
     .then((userCredential) => {
       toast.success('Регистрация прошла успешно!')
       const user = userCredential.user
-      vuefireAuth?.updateCurrentUser(user)
+      updateProfile(user, {
+        displayName: values.username,
+      }).then(() => {
+        auth.updateCurrentUser(user)
+
+        router.push('/')
+      })
     })
     .catch((error) => {
       toast.error('Что-то пошло не так! Ошибка в консоли браузера.')

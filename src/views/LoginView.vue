@@ -2,7 +2,6 @@
 import { useField, useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useRoute, useRouter } from 'vue-router'
-import { getCurrentUser, useFirebaseAuth } from 'vuefire'
 import { onMounted, ref } from 'vue'
 import { toast } from 'vue3-toastify'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
@@ -31,21 +30,9 @@ const { handleSubmit, errors, values } = useForm<LoginForm>({
 useField('email')
 useField('password')
 
-// const onSubmit = handleSubmit(async () => {
-//   const firebaseAuth = useFirebaseAuth()
-//   let redirectTo = '/'
-//   if (typeof route.query.redirect === 'string')
-//     redirectTo = route.query.redirect
-
-//   toast.success('Вход выполнен!')
-//   router.push(redirectTo)
-//   // console.log(values)
-// })
-
 const isLoading = ref(false)
 
 const onSubmit = handleSubmit(async (values) => {
-  const vuefireAuth = useFirebaseAuth()
   const auth = getAuth()
   isLoading.value = true
   signInWithEmailAndPassword(auth, values.email, values.password)
@@ -53,7 +40,7 @@ const onSubmit = handleSubmit(async (values) => {
       toast.success('Вход выполнен!')
 
       const user = userCredential.user
-      vuefireAuth?.updateCurrentUser(user)
+      auth.updateCurrentUser(user)
 
       let redirectTo = '/'
       if (typeof route.query.redirect === 'string')
@@ -71,7 +58,8 @@ const onSubmit = handleSubmit(async (values) => {
 })
 
 onMounted(async () => {
-  const currentUser = await getCurrentUser()
+  const auth = getAuth()
+  const currentUser = auth.currentUser
 
   if (currentUser) {
     let redirectTo = '/'
