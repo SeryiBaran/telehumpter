@@ -77,7 +77,7 @@ onMounted(async () => {
       Вход
     </h1>
     <form class="max-w-xs w-full flex flex-col gap-2" @submit="onSubmit">
-      <input v-model="values.email" name="email" type="text" placeholder="Ваш ник" class="input input-bordered">
+      <input v-model="values.email" name="email" type="text" placeholder="Ваш Email" class="input input-bordered">
       <span class="text-error">{{ errors.email }}</span>
       <input
         v-model="values.password" name="password" type="password" placeholder="Ваш пароль"
