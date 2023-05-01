@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useCurrentUser } from 'vuefire'
+import Link from './Link.vue'
 
 const currentUser = useCurrentUser()
 </script>

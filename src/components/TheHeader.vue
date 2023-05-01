@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { useCurrentUser, useFirebaseAuth } from 'vuefire'
+import Link from './Link.vue'
 import { useFirebaseUserLetter } from '@/composables/useFirebaseUserLetter'
 import { randomPastelHSLByStr } from '@/utils'
 
