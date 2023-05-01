@@ -16,3 +16,7 @@ export function randomPastelHSLByStr(str: string) {
 
   return `hsl(${randomColor}, 70%,  80%)`
 }
+
+export function getUpperFirstLetter(str: string) {
+  return str[0].toUpperCase()
+}

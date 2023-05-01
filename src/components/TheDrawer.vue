@@ -34,6 +34,11 @@ const currentUser = useCurrentUser()
             Хамптнуть
           </Link>
         </li>
+        <li v-if="currentUser">
+          <Link to="/posts">
+            Хампты
+          </Link>
+        </li>
         <hr>
         <li>
           <Link to="https://github.com/SeryiBaran/telehumpter">

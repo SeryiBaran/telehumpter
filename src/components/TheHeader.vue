@@ -2,14 +2,11 @@
 import { useRouter } from 'vue-router'
 import { useCurrentUser, useFirebaseAuth } from 'vuefire'
 import Link from './Link.vue'
-import { useFirebaseUserLetter } from '@/composables/useFirebaseUserLetter'
-import { randomPastelHSLByStr } from '@/utils'
+import Avatar from './Avatar.vue'
 
 const router = useRouter()
 const currentUser = useCurrentUser()
 const vuefireAuth = useFirebaseAuth()
-
-const userAvatarLetter = useFirebaseUserLetter(currentUser)
 
 function logout() {
   vuefireAuth?.signOut().then(() => {
@@ -34,14 +31,7 @@ function logout() {
       </Link>
       <div v-if="currentUser" class="dropdown dropdown-end ml-auto">
         <label tabindex="0" class="btn btn-ghost btn-circle avatar">
-          <div class="w-10 rounded-full">
-            <span
-              class="h-full text-white text-xl flex justify-center items-center"
-              :style="{ 'background-color': randomPastelHSLByStr(currentUser.uid) }"
-            >
-              {{ userAvatarLetter }}
-            </span>
-          </div>
+          <Avatar :user-nick="currentUser.displayName || 'user'" />
         </label>
         <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-base-content">
           <li>

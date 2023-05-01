@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { getAuth } from 'firebase/auth'
+import { useCurrentUser } from 'vuefire'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -31,6 +31,11 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/posts',
+      name: 'posts',
+      component: () => import('../views/PostsView.vue'),
+    },
+    {
       path: '/settings',
       name: 'settings',
       component: () => import('../views/UserSettingsView.vue'),
@@ -42,8 +47,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   // routes with `meta: { requiresAuth: true }` will check for the users, others won't
   if (to.meta.requiresAuth) {
-    const auth = getAuth()
-    const currentUser = auth.currentUser
+    const currentUser = useCurrentUser()
     // if the user is not logged in, redirect to the login page
     if (!currentUser) {
       return {
@@ -57,8 +61,7 @@ router.beforeEach(async (to) => {
     }
   }
   if (to.meta.restrictIfAuthorized) {
-    const auth = getAuth()
-    const currentUser = auth.currentUser
+    const currentUser = useCurrentUser()
     if (currentUser)
       router.push('/')
   }
