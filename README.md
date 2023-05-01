@@ -13,3 +13,17 @@
 - [Tailwind](https://tailwindcss.com/)
 - [Vue Router](https://router.vuejs.org/)
 - [Typescript](https://www.typescriptlang.org/)
+
+## Схема Firebase
+
+```json
+{
+  "posts": [
+    {
+      "content": "content of post",
+      "authorNick": "nick of post author",
+      "authorId": "id of post author"
+    }
+  ]
+}
+```

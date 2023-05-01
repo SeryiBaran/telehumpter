@@ -49,7 +49,7 @@ router.beforeEach(async (to) => {
   if (to.meta.requiresAuth) {
     const currentUser = useCurrentUser()
     // if the user is not logged in, redirect to the login page
-    if (!currentUser) {
+    if (!currentUser.value) {
       return {
         path: '/login',
         query: {
@@ -62,7 +62,7 @@ router.beforeEach(async (to) => {
   }
   if (to.meta.restrictIfAuthorized) {
     const currentUser = useCurrentUser()
-    if (currentUser)
+    if (currentUser.value)
       router.push('/')
   }
 })
