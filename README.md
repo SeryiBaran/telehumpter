@@ -20,9 +20,15 @@
 {
   "posts": [
     {
-      "content": "content of post",
-      "authorNick": "nick of post author",
-      "authorId": "id of post author"
+      "id": "_hidden",
+      "desc": "чтобы firestore не удалил ничего",
+      "hidden": true
+    },
+    {
+      "id": "рандомная строка", // сгенерировано firestore, а не мной
+      "content": "контент поста",
+      "authorNick": "ник автора поста",
+      "authorId": "id автора поста"
     }
   ]
 }
