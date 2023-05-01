@@ -34,7 +34,7 @@ const currentUser = useCurrentUser()
             Хамптнуть
           </Link>
         </li>
-        <li v-if="currentUser">
+        <li>
           <Link to="/posts">
             Хампты
           </Link>
@@ -49,7 +49,3 @@ const currentUser = useCurrentUser()
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
