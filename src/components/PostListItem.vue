@@ -41,7 +41,7 @@ function deletePost() {
       <h2 class="card-title">
         <Avatar :user-nick="authorProfile?.username" class="mr-2" />
         <span v-if="isMyPost">Вы</span>
-        <span v-else>@{{ props.post.authorNick }}</span>
+        <span v-else>@{{ authorProfile?.username }}</span>
       </h2>
       <p>{{ props.post.content }}</p>
 
