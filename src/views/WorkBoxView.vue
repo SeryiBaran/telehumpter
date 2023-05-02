@@ -3,15 +3,11 @@ import { ref } from 'vue'
 import { useField, useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useRouter } from 'vue-router'
-import { useFirebaseAuth, useFirestore } from 'vuefire'
-import { addDoc, collection } from 'firebase/firestore'
 import { toast } from 'vue3-toastify'
+import { supabase } from '@/lib/supabaseInit'
+import { getUser } from '@/lib/supabaseUtils'
 
 const router = useRouter()
-
-const db = useFirestore()
-
-const auth = useFirebaseAuth()
 
 interface LoginForm {
   content: string
@@ -31,22 +27,21 @@ useField('content')
 const isLoading = ref(false)
 
 const onSubmit = handleSubmit(async (values) => {
+  const user = await getUser()
   isLoading.value = true
-  addDoc(collection(db, 'posts'), {
-    authorId: auth?.currentUser?.uid,
-    authorNick: auth?.currentUser?.displayName,
-    content: values.content,
-  })
-    .then(() => {
-      toast.success('Хампт создан!')
+  supabase.from('posts').insert({ content: values.content, authorId: user?.id })
+    .then((data) => {
+      if (data.error) {
+        toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
 
-      router.push('/posts')
-    })
-    .catch((error) => {
-      toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
+        console.error(data.error)
+      }
+      else {
+        toast.success('Хампт создан!')
 
-      console.error(error)
-    }).finally(() => {
+        router.push('/posts')
+      }
+
       isLoading.value = false
     })
 })
@@ -58,7 +53,10 @@ const onSubmit = handleSubmit(async (values) => {
       Хамптнуть
     </h1>
     <form class="max-w-sm w-full flex flex-col gap-2" @submit="onSubmit">
-      <textarea v-model="values.content" name="content" type="text" placeholder="Напишите что-нибудь!" class="textarea textarea-bordered" />
+      <textarea
+        v-model="values.content" name="content" type="text" placeholder="Напишите что-нибудь!"
+        class="textarea textarea-bordered"
+      />
       <span class="text-error">{{ errors.content }}</span>
       <button type="submit" class="btn btn-primary" :class="{ loading: isLoading }" :disabled="isLoading">
         Хамптнуть
@@ -67,6 +65,4 @@ const onSubmit = handleSubmit(async (values) => {
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

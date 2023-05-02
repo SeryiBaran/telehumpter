@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { useCurrentUser } from 'vuefire'
 import Link from './Link.vue'
+import { useIsAuthorized } from '@/composables/useIsAuthorized'
 
-const currentUser = useCurrentUser()
+const isAuthorized = useIsAuthorized()
 </script>
 
 <template>
@@ -19,17 +19,17 @@ const currentUser = useCurrentUser()
             Закрыть это меню
           </label>
         </li>
-        <li v-if="!currentUser">
+        <li v-if="!isAuthorized">
           <Link to="/register">
             Регистрация
           </Link>
         </li>
-        <li v-if="!currentUser">
+        <li v-if="!isAuthorized">
           <Link to="/login">
             Вход
           </Link>
         </li>
-        <li v-if="currentUser">
+        <li v-if="isAuthorized">
           <Link to="/workbox">
             Хамптнуть
           </Link>

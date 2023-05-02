@@ -1,9 +1,9 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import { useCurrentUser } from 'vuefire'
+import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { supabase } from '@/lib/supabaseInit'
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/404', name: 'NotFound', component: () => import('../views/NotFoundView.vue') },
     { path: '/:pathMatch(.*)*', redirect: '/404' },
@@ -41,15 +41,20 @@ const router = createRouter({
       component: () => import('../views/UserSettingsView.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/emailConfirmed',
+      name: 'emailConfirmed',
+      component: () => import('../views/EmailConfirmedView.vue'),
+    },
   ],
 })
 
 router.beforeEach(async (to) => {
   // routes with `meta: { requiresAuth: true }` will check for the users, others won't
   if (to.meta.requiresAuth) {
-    const currentUser = useCurrentUser()
+    const isAuthorized = !!(await supabase.auth.getSession()).data.session
     // if the user is not logged in, redirect to the login page
-    if (!currentUser.value) {
+    if (!isAuthorized) {
       return {
         path: '/login',
         query: {
@@ -61,8 +66,8 @@ router.beforeEach(async (to) => {
     }
   }
   if (to.meta.restrictIfAuthorized) {
-    const currentUser = useCurrentUser()
-    if (currentUser.value)
+    const isAuthorized = !!(await supabase.auth.getSession()).data.session
+    if (isAuthorized)
       router.push('/')
   }
 })

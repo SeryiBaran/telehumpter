@@ -1,20 +1,37 @@
 <script lang="ts" setup>
-import { useCurrentUser, useFirestore } from 'vuefire'
-import { deleteDoc, doc } from 'firebase/firestore'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import { toast } from 'vue3-toastify'
 import Avatar from './Avatar.vue'
+import { useCurrentUser } from '@/composables/useCurrentUser'
+import { supabase } from '@/lib/supabaseInit'
+import { useProfileByID } from '@/composables/useProfileByID'
 
 const props = defineProps<{
   post: any
 }>()
 
-const db = useFirestore()
 const currentUser = useCurrentUser()
 
-const isMyPost = computed(() => props.post.authorNick === currentUser.value?.displayName)
+const authorProfile = useProfileByID(props.post.authorId)
+const isMyPost = computed(() => currentUser.value?.id === props.post.authorId)
+
+const isLoading = ref(false)
 
 function deletePost() {
-  deleteDoc(doc(db, 'posts', props.post.id))
+  if (isMyPost.value) {
+    isLoading.value = true
+    supabase.from('posts').delete().eq('id', props.post.id).then((data) => {
+      isLoading.value = false
+      if (data.error) {
+        toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
+
+        console.error(data.error)
+      }
+      else {
+        toast.success('Хампт удален!')
+      }
+    })
+  }
 }
 </script>
 
@@ -22,14 +39,14 @@ function deletePost() {
   <div class="card max-w-md w-full bg-base-200 shadow-xl m-3">
     <div class="card-body">
       <h2 class="card-title">
-        <Avatar :user-nick="post.authorNick" class="mr-2" />
+        <Avatar :user-nick="authorProfile?.username" class="mr-2" />
         <span v-if="isMyPost">Вы</span>
         <span v-else>@{{ props.post.authorNick }}</span>
       </h2>
       <p>{{ props.post.content }}</p>
 
       <div v-if="isMyPost" class="card-actions justify-end">
-        <button class="btn btn-error" @click="deletePost">
+        <button class="btn btn-error" :class="{ loading: isLoading }" :disabled="isLoading" @click="deletePost">
           Удалить
         </button>
       </div>

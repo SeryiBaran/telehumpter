@@ -11,14 +11,13 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.21.0",
     "daisyui": "^2.51.6",
-    "firebase": "^9.21.0",
     "pinia": "^2.0.32",
     "vee-validate": "^4.8.6",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
     "vue3-toastify": "^0.1.7",
-    "vuefire": "^3.1.0",
     "yup": "^1.1.1"
   },
   "devDependencies": {

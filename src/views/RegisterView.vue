@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { toast } from 'vue3-toastify'
 import { useField, useForm } from 'vee-validate'
 import * as yup from 'yup'
-import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
+import { supabase } from '@/lib/supabaseInit'
 
 interface RegisterForm {
   email: string
@@ -44,19 +44,22 @@ const router = useRouter()
 const isLoading = ref(false)
 
 const onSubmit = handleSubmit(async (values) => {
-  const auth = getAuth()
+  const auth = supabase.auth
   isLoading.value = true
-  createUserWithEmailAndPassword(auth, values.email, values.password)
-    .then((userCredential) => {
-      toast.success('Регистрация прошла успешно!')
-      const user = userCredential.user
-      updateProfile(user, {
-        displayName: values.username,
-      }).then(() => {
-        auth.updateCurrentUser(user)
-
-        router.push('/')
-      })
+  auth.signUp({
+    email: values.email,
+    password: values.password,
+    options: {
+      data: {
+        username: values.username,
+      },
+    },
+  }).then(async (data) => {
+    await supabase.from('profiles').insert({ id: data.data.user?.id, username: values.username })
+  })
+    .then(() => {
+      toast.success('Регистрация прошла успешно! Не забудьте подтвердить Email!')
+      router.push('/login')
     })
     .catch((error) => {
       toast.error('Что-то пошло не так! Ошибка в консоли браузера.')

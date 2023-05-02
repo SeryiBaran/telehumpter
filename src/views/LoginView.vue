@@ -2,10 +2,10 @@
 import { useField, useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useRoute, useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { toast } from 'vue3-toastify'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import Link from '@/components/Link.vue'
+import { supabase } from '@/lib/supabaseInit'
 
 const router = useRouter()
 const route = useRoute()
@@ -33,21 +33,20 @@ useField('password')
 const isLoading = ref(false)
 
 const onSubmit = handleSubmit(async (values) => {
-  const auth = getAuth()
+  const auth = supabase.auth
   isLoading.value = true
-  signInWithEmailAndPassword(auth, values.email, values.password)
-    .then((userCredential) => {
-      toast.success('Вход выполнен!')
+  auth.signInWithPassword({
+    email: values.email,
+    password: values.password,
+  }).then(() => {
+    toast.success('Вход выполнен!')
 
-      const user = userCredential.user
-      auth.updateCurrentUser(user)
+    let redirectTo = '/'
+    if (typeof route.query.redirect === 'string')
+      redirectTo = route.query.redirect
 
-      let redirectTo = '/'
-      if (typeof route.query.redirect === 'string')
-        redirectTo = route.query.redirect
-
-      router.push(redirectTo)
-    })
+    router.push(redirectTo)
+  })
     .catch((error) => {
       toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
 
@@ -55,19 +54,6 @@ const onSubmit = handleSubmit(async (values) => {
     }).finally(() => {
       isLoading.value = false
     })
-})
-
-onMounted(async () => {
-  const auth = getAuth()
-  const currentUser = auth.currentUser
-
-  if (currentUser) {
-    let redirectTo = '/'
-    if (typeof route.query.redirect === 'string')
-      redirectTo = route.query.redirect
-
-    router.push(redirectTo)
-  }
 })
 </script>
 

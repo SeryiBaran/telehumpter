@@ -1,15 +1,18 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-import { useCurrentUser, useFirebaseAuth } from 'vuefire'
 import Link from './Link.vue'
 import Avatar from './Avatar.vue'
+import { useIsAuthorized } from '@/composables/useIsAuthorized'
+import { useCurrentUser } from '@/composables/useCurrentUser'
+import { supabase } from '@/lib/supabaseInit'
+
+const isAuthorized = useIsAuthorized()
 
 const router = useRouter()
-const currentUser = useCurrentUser()
-const vuefireAuth = useFirebaseAuth()
+const user = useCurrentUser()
 
 function logout() {
-  vuefireAuth?.signOut().then(() => {
+  supabase.auth.signOut().then(() => {
     router.push('/login')
   })
 }
@@ -29,9 +32,9 @@ function logout() {
       <Link class="btn btn-ghost normal-case text-xl" to="/">
         Telehumpter
       </Link>
-      <div v-if="currentUser" class="dropdown dropdown-end ml-auto">
+      <div v-if="isAuthorized && user" class="dropdown dropdown-end ml-auto">
         <label tabindex="0" class="btn btn-ghost btn-circle avatar">
-          <Avatar :user-nick="currentUser.displayName || 'user'" />
+          <Avatar :user-nick="user.user_metadata.username || 'user'" />
         </label>
         <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-base-content">
           <li>
