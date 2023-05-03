@@ -13,8 +13,9 @@ const props = withDefaults(defineProps<{
 
 const name = toRef(props, 'name')
 
-const { value, errorMessage, errors } = useField(props.name, undefined, {
+const { value, errorMessage, errors, handleChange } = useField(props.name, undefined, {
   initialValue: props.initialValue,
+  validateOnValueUpdate: false,
 })
 
 const isValid = computed(() => errors.value.length === 0)
@@ -31,8 +32,12 @@ watch(errorMessage, (newMessage) => {
 <template>
   <div class="wrapper">
     <input
-      v-model="value" :name="name" type="text" :placeholder="props.placeholder" class="outline-transparent input input-bordered"
+      v-model="value"
+      :name="name" type="text"
+      :placeholder="props.placeholder"
+      class="outline-transparent input input-bordered"
       :class="{ 'input-error': !isValid }"
+      @blur="handleChange"
     >
 
     <span class="text-error text-xs">
