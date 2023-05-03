@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import { defineRule } from 'vee-validate'
 
 import App from './App.vue'
@@ -17,7 +16,6 @@ defineRule('confirmed', (value, [target]: [string], ctx) => {
 
 const app = createApp(App)
 
-app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
