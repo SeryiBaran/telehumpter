@@ -19,6 +19,7 @@ const { value, errorMessage, errors } = useField(props.name, undefined, {
 
 const isValid = computed(() => errors.value.length === 0)
 
+// если юзать в тексте ошибки просто errorMessage, transform не будет срабатывать (почему? хз)
 const persistedErrorMessage = ref('')
 
 watch(errorMessage, (newMessage) => {
