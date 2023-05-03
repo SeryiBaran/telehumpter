@@ -51,7 +51,11 @@ const onSubmit = handleSubmit(async (values) => {
       },
     },
   }).then(async (data) => {
-    await supabase.from('profiles').insert({ id: data.data.user?.id, username: values.username })
+    if (data.data.user)
+      await supabase.from('profiles').insert({ id: data.data.user.id, username: values.username })
+
+    else
+      throw data.error || new Error('data.user после регистрации пуст!')
   })
     .then(() => {
       toast.success('Регистрация прошла успешно! Не забудьте подтвердить Email!')

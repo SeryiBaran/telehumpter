@@ -29,21 +29,27 @@ const isLoading = ref(false)
 const onSubmit = handleSubmit(async (values) => {
   const user = await getUser()
   isLoading.value = true
-  supabase.from('posts').insert({ content: values.content, authorId: user?.id })
-    .then((data) => {
-      if (data.error) {
-        toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
 
-        console.error(data.error)
-      }
-      else {
-        toast.success('Хампт создан!')
+  if (user) {
+    supabase.from('posts').insert({ content: values.content, authorId: user.id })
+      .then((data) => {
+        if (data.error) {
+          toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
 
-        router.push('/posts')
-      }
+          console.error(data.error)
+        }
+        else {
+          toast.success('Хампт создан!')
 
-      isLoading.value = false
-    })
+          router.push('/posts')
+        }
+
+        isLoading.value = false
+      })
+  }
+  else {
+    toast.error('Вы не авторизованы!')
+  }
 })
 </script>
 
