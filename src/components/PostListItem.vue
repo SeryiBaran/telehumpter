@@ -5,9 +5,10 @@ import Avatar from './Avatar.vue'
 import { useCurrentUser } from '@/composables/useCurrentUser'
 import { supabase } from '@/lib/supabaseInit'
 import { useProfileByID } from '@/composables/useProfileByID'
+import type { Post } from '@/types'
 
 const props = defineProps<{
-  post: any
+  post: Post
 }>()
 
 const currentUser = useCurrentUser()

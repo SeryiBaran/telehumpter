@@ -7,11 +7,11 @@ import { toast } from 'vue3-toastify'
 import { supabase } from '@/lib/supabaseInit'
 import { getUser } from '@/lib/supabaseUtils'
 
-const router = useRouter()
-
 interface LoginForm {
   content: string
 }
+
+const router = useRouter()
 
 const { handleSubmit, errors, values } = useForm<LoginForm>({
   validationSchema: {

@@ -6,9 +6,8 @@ import { useIsAuthorized } from '@/composables/useIsAuthorized'
 import { useCurrentUser } from '@/composables/useCurrentUser'
 import { supabase } from '@/lib/supabaseInit'
 
-const isAuthorized = useIsAuthorized()
-
 const router = useRouter()
+const isAuthorized = useIsAuthorized()
 const user = useCurrentUser()
 
 function logout() {

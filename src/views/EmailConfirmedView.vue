@@ -1,6 +1,3 @@
-<script lang="ts" setup>
-</script>
-
 <template>
   <div class="hero grow">
     <div class="hero-content text-center">
@@ -15,5 +12,3 @@
     </div>
   </div>
 </template>
-
-<style scoped></style>

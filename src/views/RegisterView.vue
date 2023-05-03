@@ -14,7 +14,7 @@ interface RegisterForm {
   passwordRepeat: string
 }
 
-const { handleSubmit, errors, values } = useForm<RegisterForm>({
+const { handleSubmit } = useForm<RegisterForm>({
   validationSchema: {
     email: yup
       .string()
@@ -83,5 +83,3 @@ const onSubmit = handleSubmit(async (values) => {
     </form>
   </div>
 </template>
-
-<style scoped></style>

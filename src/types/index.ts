@@ -1,10 +1,5 @@
-export interface Post {
-  id: string
-  content: string
-  authorId: string
-}
+import type { Database } from './supabase'
 
-export interface Profile {
-  username: string
-  id: string
-}
+export type Post = Database['public']['Tables']['posts']['Row']
+
+export type Profile = Database['public']['Tables']['profiles']['Row']

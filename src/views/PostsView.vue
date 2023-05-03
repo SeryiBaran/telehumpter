@@ -7,15 +7,17 @@ import type { Post } from '@/types'
 const posts = ref<Post[]>([])
 
 supabase.from('posts').select('*').then((data) => {
-  if (data.data)
-    posts.value = data.data as Post[]
+  if (!data.error)
+    posts.value = data.data
 })
 
 supabase
   .channel('any')
-  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, (payload) => {
-    posts.value.push(payload.new as Post)
-  })
+  .on(
+    'postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' },
+    ({ new: newContent }: { new: Post }) => {
+      posts.value.push(newContent)
+    })
   .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'posts' }, (payload) => {
     posts.value.splice(posts.value.findIndex(post => post.id === payload.old.id), 1)
   })

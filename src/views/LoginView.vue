@@ -8,13 +8,13 @@ import Link from '@/components/Link.vue'
 import Input from '@/components/Input.vue'
 import { supabase } from '@/lib/supabaseInit'
 
-const router = useRouter()
-const route = useRoute()
-
 interface LoginForm {
   email: string
   password: string
 }
+
+const router = useRouter()
+const route = useRoute()
 
 const { handleSubmit } = useForm<LoginForm>({
   validationSchema: {

@@ -61,3 +61,17 @@ create table
 | `INSERT` | All users can create profiles.             |
 | `SELECT` | All users can view profiles.               |
 | `UPDATE` | Individuals can update their own profiles. |
+
+## Генерация типов из БД
+
+Авторизуйтесь:
+
+```bash
+npx supabase login
+```
+
+Сгенерируйте типы:
+
+```bash
+npx supabase gen types typescript --project-id АЙДИ_ПРОЕКТА --schema public > src/types/supabase.ts
+```

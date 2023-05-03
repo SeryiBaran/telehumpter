@@ -8,9 +8,7 @@ import router from './router'
 import 'vue3-toastify/dist/index.css'
 import './assets/main.css'
 
-// TODO: пофиксить
-// @ts-expect-error `Type 'any[] | Record<string, any>' must have a '[Symbol.iterator]()' method that returns an iterator.`
-defineRule('confirmed', (value, [target], ctx) => {
+defineRule('confirmed', (value, [target]: [string], ctx) => {
   if (!!value && value === ctx.form[target])
     return true
 
