@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { useField, useForm } from 'vee-validate'
+import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import { supabase } from '@/lib/supabaseInit'
+import Input from '@/components/Input.vue'
 
 interface RegisterForm {
   email: string
@@ -22,7 +23,7 @@ const { handleSubmit, errors, values } = useForm<RegisterForm>({
     username: yup
       .string()
       .required('Это поле обязательно!')
-      .matches(/^[a-zA-Z0-9]+$/g, 'Это поле должно содержать только латинские буквы и цифры!')
+      .matches(/^[a-zA-Z0-9]+$/g, 'Это поле должно содержать только a-Z и 0-9!')
       .min(4, 'Это поле должно быть не менее 4 символов!')
       .max(18, 'Это поле должно быть не более 18 символов!'),
     password: yup
@@ -33,11 +34,6 @@ const { handleSubmit, errors, values } = useForm<RegisterForm>({
     passwordRepeat: 'confirmed:password',
   },
 })
-
-useField('email')
-useField('username')
-useField('password')
-useField('passwordRepeat')
 
 const router = useRouter()
 
@@ -76,27 +72,11 @@ const onSubmit = handleSubmit(async (values) => {
     <h1 class="text-4xl">
       Регистрация
     </h1>
-    <form class="max-w-xs w-full flex flex-col gap-2" @submit="onSubmit">
-      <input
-        v-model="values.email" name="email" type="text" placeholder="Ваш Email" class="input input-bordered"
-        :class="{ 'input-error': !!errors.email }"
-      >
-      <span class="text-error">{{ errors.email }}</span>
-      <input
-        v-model="values.username" name="username" type="text" placeholder="Ваш ник" class="input input-bordered"
-        :class="{ 'input-error': !!errors.username }"
-      >
-      <span class="text-error">{{ errors.username }}</span>
-      <input
-        v-model="values.password" name="password" type="password" placeholder="Ваш пароль"
-        class="input input-bordered" :class="{ 'input-error': !!errors.password }"
-      >
-      <span class="text-error">{{ errors.password }}</span>
-      <input
-        v-model="values.passwordRepeat" name="passwordRepeat" type="password" placeholder="Повторите пароль"
-        class="input input-bordered" :class="{ 'input-error': !!errors.passwordRepeat }"
-      >
-      <span class="text-error">{{ errors.passwordRepeat }}</span>
+    <form class="max-w-xs w-full flex flex-col gap-1" @submit="onSubmit">
+      <Input name="email" placeholder="Ваш Email" />
+      <Input name="username" placeholder="Ваш ник" />
+      <Input name="password" placeholder="Ваш пароль" />
+      <Input name="passwordRepeat" placeholder="Повторите пароль" />
       <button type="submit" class="btn btn-primary" :class="{ loading: isLoading }" :disabled="isLoading">
         Зарегистрироваться
       </button>
