@@ -8,8 +8,7 @@ import 'vue3-toastify/dist/index.css'
 import './assets/main.css'
 
 defineRule('confirmed', (value, [target]: [string], ctx) => {
-  if (!!value && value === ctx.form[target])
-    return true
+  if (!!value && value === ctx.form[target]) return true
 
   return 'Пароли должны совпадать!'
 })

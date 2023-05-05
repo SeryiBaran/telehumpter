@@ -2,21 +2,28 @@
 import { computed, ref, toRef, watch } from 'vue'
 import { useField } from 'vee-validate'
 
-const props = withDefaults(defineProps<{
-  initialValue?: string
-  name: string
-  placeholder?: string
-}>(), {
-  initialValue: '',
-  placeholder: '',
-})
+const props = withDefaults(
+  defineProps<{
+    initialValue?: string
+    name: string
+    placeholder?: string
+  }>(),
+  {
+    initialValue: '',
+    placeholder: '',
+  }
+)
 
 const name = toRef(props, 'name')
 
-const { value, errorMessage, errors, handleChange } = useField(props.name, undefined, {
-  initialValue: props.initialValue,
-  validateOnValueUpdate: false,
-})
+const { value, errorMessage, errors, handleChange } = useField(
+  props.name,
+  undefined,
+  {
+    initialValue: props.initialValue,
+    validateOnValueUpdate: false,
+  }
+)
 
 const isValid = computed(() => errors.value.length === 0)
 
@@ -33,12 +40,13 @@ watch(errorMessage, (newMessage) => {
   <div class="wrapper">
     <input
       v-model="value"
-      :name="name" type="text"
+      :name="name"
+      type="text"
       :placeholder="props.placeholder"
       class="outline-transparent input input-bordered"
       :class="{ 'input-error': !isValid }"
       @blur="handleChange"
-    >
+    />
 
     <span class="text-error text-xs">
       <Transition name="errorTransition">

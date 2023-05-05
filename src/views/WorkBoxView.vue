@@ -18,7 +18,8 @@ const { handleSubmit, errors, values } = useForm<LoginForm>({
     content: yup
       .string()
       .required('Это поле обязательно!')
-      .min(4, 'Это поле должно быть не менее 4 символов!').max(1000, 'Это поле должно быть не более 1000 символов!'),
+      .min(4, 'Это поле должно быть не менее 4 символов!')
+      .max(1000, 'Это поле должно быть не более 1000 символов!'),
   },
 })
 
@@ -31,14 +32,15 @@ const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true
 
   if (user) {
-    supabase.from('posts').insert({ content: values.content, authorId: user.id })
+    supabase
+      .from('posts')
+      .insert({ content: values.content, authorId: user.id })
       .then((data) => {
         if (data.error) {
           toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
 
           console.error(data.error)
-        }
-        else {
+        } else {
           toast.success('Хампт создан!')
 
           router.push('/posts')
@@ -46,8 +48,7 @@ const onSubmit = handleSubmit(async (values) => {
 
         isLoading.value = false
       })
-  }
-  else {
+  } else {
     toast.error('Вы не авторизованы!')
   }
 })
@@ -55,16 +56,22 @@ const onSubmit = handleSubmit(async (values) => {
 
 <template>
   <div class="grow flex flex-col gap-12">
-    <h1 class="text-4xl">
-      Хамптнуть
-    </h1>
+    <h1 class="text-4xl">Хамптнуть</h1>
     <form class="max-w-sm w-full flex flex-col gap-2" @submit="onSubmit">
       <textarea
-        v-model="values.content" name="content" type="text" placeholder="Напишите что-нибудь!"
+        v-model="values.content"
+        name="content"
+        type="text"
+        placeholder="Напишите что-нибудь!"
         class="textarea textarea-bordered"
       />
       <span class="text-error">{{ errors.content }}</span>
-      <button type="submit" class="btn btn-primary" :class="{ loading: isLoading }" :disabled="isLoading">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        :class="{ loading: isLoading }"
+        :disabled="isLoading"
+      >
         Хамптнуть
       </button>
     </form>

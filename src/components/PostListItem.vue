@@ -21,17 +21,20 @@ const isLoading = ref(false)
 function deletePost() {
   if (isMyPost.value) {
     isLoading.value = true
-    supabase.from('posts').delete().eq('id', props.post.id).then((data) => {
-      isLoading.value = false
-      if (data.error) {
-        toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
+    supabase
+      .from('posts')
+      .delete()
+      .eq('id', props.post.id)
+      .then((data) => {
+        isLoading.value = false
+        if (data.error) {
+          toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
 
-        console.error(data.error)
-      }
-      else {
-        toast.success('Хампт удален!')
-      }
-    })
+          console.error(data.error)
+        } else {
+          toast.success('Хампт удален!')
+        }
+      })
   }
 }
 </script>
@@ -47,7 +50,12 @@ function deletePost() {
       <p>{{ props.post.content }}</p>
 
       <div v-if="isMyPost" class="card-actions justify-end">
-        <button class="btn btn-error" :class="{ loading: isLoading }" :disabled="isLoading" @click="deletePost">
+        <button
+          class="btn btn-error"
+          :class="{ loading: isLoading }"
+          :disabled="isLoading"
+          @click="deletePost"
+        >
           Удалить
         </button>
       </div>

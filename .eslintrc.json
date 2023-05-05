@@ -1,5 +1,9 @@
 {
-  "extends": [
-    "@antfu"
-  ]
+  "extends": ["@antfu", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "antfu/if-newline": "off",
+    "no-console": "off"
+  }
 }

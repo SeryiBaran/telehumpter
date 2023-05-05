@@ -22,9 +22,7 @@ const { handleSubmit } = useForm<LoginForm>({
       .string()
       .required('Это поле обязательно!')
       .email('Это поле должно содержать Email!'),
-    password: yup
-      .string()
-      .required('Это поле обязательно!'),
+    password: yup.string().required('Это поле обязательно!'),
   },
 })
 
@@ -33,52 +31,54 @@ const isLoading = ref(false)
 const onSubmit = handleSubmit(async (values) => {
   const auth = supabase.auth
   isLoading.value = true
-  auth.signInWithPassword({
-    email: values.email,
-    password: values.password,
-  }).then((data) => {
-    if (data.error) {
-      switch (data.error.message) {
-        case 'Invalid login credentials':
-          toast.error('Неверные данные!')
-          break
+  auth
+    .signInWithPassword({
+      email: values.email,
+      password: values.password,
+    })
+    .then((data) => {
+      if (data.error) {
+        switch (data.error.message) {
+          case 'Invalid login credentials':
+            toast.error('Неверные данные!')
+            break
 
-        default:
-          toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
-          break
+          default:
+            toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
+            break
+        }
+
+        console.error(data.error)
+      } else {
+        toast.success('Вход выполнен!')
+
+        let redirectTo = '/'
+        if (typeof route.query.redirect === 'string')
+          redirectTo = route.query.redirect
+
+        router.push(redirectTo)
       }
 
-      console.error(data.error)
-    }
-    else {
-      toast.success('Вход выполнен!')
-
-      let redirectTo = '/'
-      if (typeof route.query.redirect === 'string')
-        redirectTo = route.query.redirect
-
-      router.push(redirectTo)
-    }
-
-    isLoading.value = false
-  })
+      isLoading.value = false
+    })
 })
 </script>
 
 <template>
   <div class="grow flex flex-col gap-12 justify-center items-center">
-    <h1 class="text-4xl">
-      Вход
-    </h1>
+    <h1 class="text-4xl">Вход</h1>
     <form class="max-w-xs w-full flex flex-col gap-1" @submit="onSubmit">
       <Input name="email" placeholder="Ваш Email" />
       <Input name="password" placeholder="Ваш пароль" />
-      <button type="submit" class="btn btn-primary" :class="{ loading: isLoading }" :disabled="isLoading">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        :class="{ loading: isLoading }"
+        :disabled="isLoading"
+      >
         Войти
       </button>
-      <Link to="/register" class="link">
-        Ещё не зарегестрированы?
-      </Link>
+      <Link to="/register" class="link"> Ещё не зарегестрированы? </Link>
     </form>
   </div>
 </template>

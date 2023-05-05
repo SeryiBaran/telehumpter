@@ -6,4 +6,7 @@ const supabaseConfig = {
   PUBLIC_KEY: import.meta.env.VITE_SUPABASE_PUBLIC_KEY,
 }
 
-export const supabase = createClient<Database>(supabaseConfig.URL, supabaseConfig.PUBLIC_KEY)
+export const supabase = createClient<Database>(
+  supabaseConfig.URL,
+  supabaseConfig.PUBLIC_KEY
+)

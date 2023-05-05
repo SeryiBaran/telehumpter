@@ -42,30 +42,35 @@ const isLoading = ref(false)
 const onSubmit = handleSubmit(async (values) => {
   const auth = supabase.auth
   isLoading.value = true
-  auth.signUp({
-    email: values.email,
-    password: values.password,
-    options: {
-      data: {
-        username: values.username,
+  auth
+    .signUp({
+      email: values.email,
+      password: values.password,
+      options: {
+        data: {
+          username: values.username,
+        },
       },
-    },
-  }).then(async (data) => {
-    if (data.data.user)
-      await supabase.from('profiles').insert({ id: data.data.user.id, username: values.username })
-
-    else
-      throw data.error || new Error('data.user после регистрации пуст!')
-  })
+    })
+    .then(async (data) => {
+      if (data.data.user)
+        await supabase
+          .from('profiles')
+          .insert({ id: data.data.user.id, username: values.username })
+      else throw data.error || new Error('data.user после регистрации пуст!')
+    })
     .then(() => {
-      toast.success('Регистрация прошла успешно! Не забудьте подтвердить Email!')
+      toast.success(
+        'Регистрация прошла успешно! Не забудьте подтвердить Email!'
+      )
       router.push('/login')
     })
     .catch((error) => {
       toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
 
       console.error(error)
-    }).finally(() => {
+    })
+    .finally(() => {
       isLoading.value = false
     })
 })
@@ -73,15 +78,18 @@ const onSubmit = handleSubmit(async (values) => {
 
 <template>
   <div class="grow flex flex-col gap-12 justify-center items-center">
-    <h1 class="text-4xl">
-      Регистрация
-    </h1>
+    <h1 class="text-4xl">Регистрация</h1>
     <form class="max-w-xs w-full flex flex-col gap-1" @submit="onSubmit">
       <Input name="email" placeholder="Ваш Email" />
       <Input name="username" placeholder="Ваш ник" />
       <Input name="password" placeholder="Ваш пароль" />
       <Input name="passwordRepeat" placeholder="Повторите пароль" />
-      <button type="submit" class="btn btn-primary" :class="{ loading: isLoading }" :disabled="isLoading">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        :class="{ loading: isLoading }"
+        :disabled="isLoading"
+      >
         Зарегистрироваться
       </button>
     </form>
