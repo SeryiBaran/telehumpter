@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { RoutesPaths } from '@/router/routes'
+</script>
+
 <template>
   <div class="hero grow">
     <div class="hero-content text-center">
@@ -5,7 +9,9 @@
         <span class="text-8xl">404</span>
 
         <h1 class="text-4xl">Страница не найдена!</h1>
-        <RouterLink class="btn btn-primary" to="/"> На главную </RouterLink>
+        <RouterLink class="btn btn-primary" :to="RoutesPaths.HOME">
+          На главную
+        </RouterLink>
       </div>
     </div>
   </div>

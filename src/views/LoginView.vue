@@ -7,6 +7,7 @@ import { toast } from 'vue3-toastify'
 import Link from '@/components/Link.vue'
 import Input from '@/components/Input.vue'
 import { supabase } from '@/lib/supabaseInit'
+import { RoutesPaths } from '@/router/routes'
 
 interface LoginForm {
   email: string
@@ -52,7 +53,7 @@ const onSubmit = handleSubmit(async (values) => {
       } else {
         toast.success('Вход выполнен!')
 
-        let redirectTo = '/'
+        let redirectTo: string = RoutesPaths.HOME
         if (typeof route.query.redirect === 'string')
           redirectTo = route.query.redirect
 
@@ -78,7 +79,9 @@ const onSubmit = handleSubmit(async (values) => {
       >
         Войти
       </button>
-      <Link to="/register" class="link"> Ещё не зарегестрированы? </Link>
+      <Link :to="RoutesPaths.REGISTER" class="link">
+        Ещё не зарегестрированы?
+      </Link>
     </form>
   </div>
 </template>

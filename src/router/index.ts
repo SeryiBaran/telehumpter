@@ -1,53 +1,54 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { RoutesPaths } from './routes'
 import { supabase } from '@/lib/supabaseInit'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/404',
-      name: 'NotFound',
+      path: RoutesPaths.NOT_FOUND,
+      name: 'NOT_FOUND',
       component: () => import('../views/NotFoundView.vue'),
     },
     { path: '/:pathMatch(.*)*', redirect: '/404' },
     {
-      path: '/',
-      name: 'home',
+      path: RoutesPaths.HOME,
+      name: 'HOME',
       component: HomeView,
     },
     {
-      path: '/register',
-      name: 'register',
+      path: RoutesPaths.REGISTER,
+      name: 'REGISTER',
       component: () => import('../views/RegisterView.vue'),
       meta: { restrictIfAuthorized: true },
     },
     {
-      path: '/login',
-      name: 'login',
+      path: RoutesPaths.LOGIN,
+      name: 'LOGIN',
       component: () => import('../views/LoginView.vue'),
       meta: { restrictIfAuthorized: true },
     },
     {
-      path: '/workbox',
-      name: 'workbox',
+      path: RoutesPaths.WORKBOX,
+      name: 'WORKBOX',
       component: () => import('../views/WorkBoxView.vue'),
       meta: { requiresAuth: true },
     },
     {
-      path: '/posts',
-      name: 'posts',
+      path: RoutesPaths.POSTS,
+      name: 'POSTS',
       component: () => import('../views/PostsView.vue'),
     },
     {
-      path: '/settings',
-      name: 'settings',
+      path: RoutesPaths.SETTINGS,
+      name: 'SETTINGS',
       component: () => import('../views/UserSettingsView.vue'),
       meta: { requiresAuth: true },
     },
     {
-      path: '/emailConfirmed',
-      name: 'emailConfirmed',
+      path: RoutesPaths.EMAIL_CONFIRMED,
+      name: 'EMAIL_CONFIRMED',
       component: () => import('../views/EmailConfirmedView.vue'),
     },
   ],
@@ -60,7 +61,7 @@ router.beforeEach(async (to) => {
     // if the user is not logged in, redirect to the login page
     if (!isAuthorized) {
       return {
-        path: '/login',
+        path: RoutesPaths.LOGIN,
         query: {
           // we keep the current path in the query so we can redirect to it after login
           // with `router.push(route.query.redirect || '/')`
@@ -71,7 +72,7 @@ router.beforeEach(async (to) => {
   }
   if (to.meta.restrictIfAuthorized) {
     const isAuthorized = !!(await supabase.auth.getSession()).data.session
-    if (isAuthorized) router.push('/')
+    if (isAuthorized) router.push(RoutesPaths.HOME)
   }
 })
 

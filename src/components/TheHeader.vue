@@ -5,6 +5,7 @@ import Avatar from './Avatar.vue'
 import { useIsAuthorized } from '@/composables/useIsAuthorized'
 import { useCurrentUser } from '@/composables/useCurrentUser'
 import { supabase } from '@/lib/supabaseInit'
+import { RoutesPaths } from '@/router/routes'
 
 const router = useRouter()
 const isAuthorized = useIsAuthorized()
@@ -12,7 +13,7 @@ const user = useCurrentUser()
 
 function logout() {
   supabase.auth.signOut().then(() => {
-    router.push('/login')
+    router.push(RoutesPaths.LOGIN)
   })
 }
 </script>
@@ -47,7 +48,7 @@ function logout() {
           class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-base-content"
         >
           <li>
-            <Link to="/settings"> Настройки </Link>
+            <Link :to="RoutesPaths.SETTINGS"> Настройки </Link>
           </li>
           <li>
             <button @click="logout">Выйти</button>

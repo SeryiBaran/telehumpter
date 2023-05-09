@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import { supabase } from '@/lib/supabaseInit'
 import Input from '@/components/Input.vue'
+import { RoutesPaths } from '@/router/routes'
 
 interface RegisterForm {
   email: string
@@ -63,7 +64,7 @@ const onSubmit = handleSubmit(async (values) => {
       toast.success(
         'Регистрация прошла успешно! Не забудьте подтвердить Email!'
       )
-      router.push('/login')
+      router.push(RoutesPaths.LOGIN)
     })
     .catch((error) => {
       toast.error('Что-то пошло не так! Ошибка в консоли браузера.')

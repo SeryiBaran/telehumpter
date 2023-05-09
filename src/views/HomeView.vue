@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { RoutesPaths } from '@/router/routes'
 </script>
 
 <template>
@@ -8,7 +9,7 @@ import { RouterLink } from 'vue-router'
       <div class="max-w-xl flex flex-col gap-12 items-center">
         <h1 class="text-4xl">Telehumpter</h1>
         <p>Скорее пиши всякую чушь!</p>
-        <RouterLink class="btn btn-primary" to="/workbox">
+        <RouterLink class="btn btn-primary" :to="RoutesPaths.WORKBOX">
           Го го го!
         </RouterLink>
       </div>

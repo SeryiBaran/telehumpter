@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Link from './Link.vue'
+import { RoutesPaths } from '@/router/routes'
 import { useIsAuthorized } from '@/composables/useIsAuthorized'
 
 const isAuthorized = useIsAuthorized()
@@ -20,16 +21,16 @@ const isAuthorized = useIsAuthorized()
           <label for="my-drawer"> Закрыть это меню </label>
         </li>
         <li v-if="!isAuthorized">
-          <Link to="/register"> Регистрация </Link>
+          <Link :to="RoutesPaths.REGISTER">Регистрация</Link>
         </li>
         <li v-if="!isAuthorized">
-          <Link to="/login"> Вход </Link>
+          <Link :to="RoutesPaths.LOGIN">Вход</Link>
         </li>
         <li v-if="isAuthorized">
-          <Link to="/workbox"> Хамптнуть </Link>
+          <Link :to="RoutesPaths.WORKBOX">Хамптнуть</Link>
         </li>
         <li>
-          <Link to="/posts"> Хампты </Link>
+          <Link :to="RoutesPaths.POSTS">Хампты</Link>
         </li>
         <hr />
         <li>

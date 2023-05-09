@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import { supabase } from '@/lib/supabaseInit'
 import { getUser } from '@/lib/supabaseUtils'
+import { RoutesPaths } from '@/router/routes'
 
 interface LoginForm {
   content: string
@@ -43,7 +44,7 @@ const onSubmit = handleSubmit(async (values) => {
         } else {
           toast.success('Хампт создан!')
 
-          router.push('/posts')
+          router.push(RoutesPaths.POSTS)
         }
 
         isLoading.value = false
