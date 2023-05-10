@@ -1,17 +1,11 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.node.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
-  "compilerOptions": {
-    "baseUrl": ".",
-    "ignoreDeprecations": "5.0",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-
+  "files": [],
   "references": [
     {
       "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
     }
   ]
 }
