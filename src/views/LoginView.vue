@@ -39,14 +39,14 @@ const onSubmit = handleSubmit(async (values) => {
     })
     .then((data) => {
       if (data.error) {
-        switch (data.error.message) {
-          case 'Invalid login credentials':
-            toast.error('Неверные данные!')
-            break
+        const lowerCasedError = data.error.message.toLowerCase()
 
-          default:
-            toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
-            break
+        if (lowerCasedError.includes('confirmation')) {
+          toast.error('Email не подтвержден!')
+        } else if (lowerCasedError.includes('invalid')) {
+          toast.error('Неверные данные!')
+        } else {
+          toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
         }
 
         console.error(data.error)
