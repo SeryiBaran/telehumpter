@@ -41,7 +41,7 @@ const onSubmit = handleSubmit(async (values) => {
       if (data.error) {
         const lowerCasedError = data.error.message.toLowerCase()
 
-        if (lowerCasedError.includes('confirmation')) {
+        if (lowerCasedError.includes('confirm')) {
           toast.error('Email не подтвержден!')
         } else if (lowerCasedError.includes('invalid')) {
           toast.error('Неверные данные!')
