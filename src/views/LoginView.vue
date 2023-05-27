@@ -1,67 +1,26 @@
 <script lang="ts" setup>
 import { useForm } from 'vee-validate'
-import * as yup from 'yup'
-import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { toast } from 'vue3-toastify'
 import Link from '@/components/Link.vue'
 import Input from '@/components/Input.vue'
-import { supabase } from '@/lib/supabaseInit'
 import { RoutesPaths } from '@/router/routes'
+import { loginFormSchema } from '@/yup/loginForm.schema'
+import type { LoginForm } from '@/types'
+import { useAuth } from '@/composables/useAuth'
 
-interface LoginForm {
-  email: string
-  password: string
-}
-
-const router = useRouter()
-const route = useRoute()
+const { loginWithPassword } = useAuth()
 
 const { handleSubmit } = useForm<LoginForm>({
-  validationSchema: {
-    email: yup
-      .string()
-      .required('Это поле обязательно!')
-      .email('Это поле должно содержать Email!'),
-    password: yup.string().required('Это поле обязательно!'),
-  },
+  validationSchema: loginFormSchema,
 })
 
 const isLoading = ref(false)
 
 const onSubmit = handleSubmit(async (values) => {
-  const auth = supabase.auth
   isLoading.value = true
-  auth
-    .signInWithPassword({
-      email: values.email,
-      password: values.password,
-    })
-    .then((data) => {
-      if (data.error) {
-        const lowerCasedError = data.error.message.toLowerCase()
-
-        if (lowerCasedError.includes('confirm')) {
-          toast.error('Email не подтвержден!')
-        } else if (lowerCasedError.includes('invalid')) {
-          toast.error('Неверные данные!')
-        } else {
-          toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
-        }
-
-        console.error(data.error)
-      } else {
-        toast.success('Вход выполнен!')
-
-        let redirectTo: string = RoutesPaths.HOME
-        if (typeof route.query.redirect === 'string')
-          redirectTo = route.query.redirect
-
-        router.push(redirectTo)
-      }
-
-      isLoading.value = false
-    })
+  loginWithPassword(values).finally(() => {
+    isLoading.value = false
+  })
 })
 </script>
 

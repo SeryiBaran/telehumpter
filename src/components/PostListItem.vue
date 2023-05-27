@@ -1,17 +1,16 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { toast } from 'vue3-toastify'
 import Avatar from './Avatar.vue'
-import { useCurrentUser } from '@/composables/useCurrentUser'
-import { supabase } from '@/lib/supabaseInit'
 import { useProfileByID } from '@/composables/useProfileByID'
 import type { Post } from '@/types'
+import { useAuth } from '@/composables/useAuth'
+import { deletePost as apiDeletePost } from '@/api/posts'
 
 const props = defineProps<{
   post: Post
 }>()
 
-const currentUser = useCurrentUser()
+const { currentUser } = useAuth()
 
 const authorProfile = useProfileByID(props.post.authorId)
 const isMyPost = computed(() => currentUser.value?.id === props.post.authorId)
@@ -21,20 +20,9 @@ const isLoading = ref(false)
 function deletePost() {
   if (isMyPost.value) {
     isLoading.value = true
-    supabase
-      .from('posts')
-      .delete()
-      .eq('id', props.post.id)
-      .then((data) => {
-        isLoading.value = false
-        if (data.error) {
-          toast.error('Что-то пошло не так! Ошибка в консоли браузера.')
-
-          console.error(data.error)
-        } else {
-          toast.success('Хампт удален!')
-        }
-      })
+    apiDeletePost(props.post.id).finally(() => {
+      isLoading.value = false
+    })
   }
 }
 </script>

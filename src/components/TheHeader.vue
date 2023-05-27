@@ -1,21 +1,11 @@
 <script lang="ts" setup>
-import { useRouter } from 'vue-router'
 import Link from './Link.vue'
 import Avatar from './Avatar.vue'
-import { useIsAuthorized } from '@/composables/useIsAuthorized'
-import { useCurrentUser } from '@/composables/useCurrentUser'
-import { supabase } from '@/lib/supabaseInit'
 import { RoutesPaths } from '@/router/routes'
+import { useAuth } from '@/composables/useAuth'
+import { logout } from '@/api/auth'
 
-const router = useRouter()
-const isAuthorized = useIsAuthorized()
-const user = useCurrentUser()
-
-function logout() {
-  supabase.auth.signOut().then(() => {
-    router.push(RoutesPaths.LOGIN)
-  })
-}
+const { currentUser: user, isAuthorized } = useAuth()
 </script>
 
 <template>
