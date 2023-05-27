@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import Link from './Link.vue'
+import { useAuth } from '@/composables/useAuth'
 import { RoutesPaths } from '@/router/routes'
-import { useIsAuthorized } from '@/composables/useIsAuthorized'
 
-const isAuthorized = useIsAuthorized()
+const { isAuthorized } = useAuth()
 </script>
 
 <template>
