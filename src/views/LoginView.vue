@@ -4,9 +4,9 @@ import { ref } from 'vue'
 import Link from '@/components/Link.vue'
 import Input from '@/components/Input.vue'
 import { RoutesPaths } from '@/router/routes'
-import { loginFormSchema } from '@/yup/loginForm.schema'
-import type { LoginForm } from '@/types'
 import { useAuth } from '@/composables/useAuth'
+import type { LoginForm } from '@/types'
+import { loginFormSchema } from '@/yup/loginForm.schema'
 
 const { loginWithPassword } = useAuth()
 
