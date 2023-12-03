@@ -35,13 +35,17 @@ const { currentUser: user, isAuthorized } = useAuth()
         </label>
         <ul
           tabindex="0"
-          class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-base-content"
+          class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-base-content gap-2"
         >
           <li>
-            <Link :to="RoutesPaths.SETTINGS"> Настройки </Link>
+            <Link :to="RoutesPaths.SETTINGS">
+              Настройки
+            </Link>
           </li>
           <li>
-            <button @click="logout">Выйти</button>
+            <button @click="logout">
+              Выйти
+            </button>
           </li>
         </ul>
       </div>

@@ -7,14 +7,16 @@ const props = withDefaults(
     initialValue?: string
     name: string
     placeholder?: string
+    is?: 'input' | 'textarea'
   }>(),
   {
     initialValue: '',
     placeholder: '',
-  }
+  },
 )
 
 const name = toRef(props, 'name')
+const is = props.is || 'input'
 
 const { value, errorMessage, errors, handleChange } = useField(
   props.name,
@@ -22,7 +24,7 @@ const { value, errorMessage, errors, handleChange } = useField(
   {
     initialValue: props.initialValue,
     validateOnValueUpdate: false,
-  }
+  },
 )
 
 const isValid = computed(() => errors.value.length === 0)
@@ -38,16 +40,16 @@ watch(errorMessage, (newMessage) => {
 
 <template>
   <div class="wrapper">
-    <input
+    <component
+      :is="is || 'input'"
       v-model="value"
       :name="name"
       type="text"
       :placeholder="props.placeholder"
-      class="outline-transparent input input-bordered"
-      :class="{ 'input-error': !isValid }"
+      class="outline-transparent"
+      :class="[(!isValid ? 'input-error' : ''), (is === 'input' ? 'input input-bordered' : ''), (is === 'textarea' ? 'textarea textarea-bordered' : '')]"
       @blur="handleChange"
     />
-
     <span class="text-error text-xs">
       <Transition name="errorTransition">
         <span v-if="!isValid" class="block">{{ persistedErrorMessage }}</span>
