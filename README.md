@@ -75,3 +75,9 @@ npx supabase login
 ```bash
 npx supabase gen types typescript --project-id АЙДИ_ПРОЕКТА --schema public > src/types/supabase.ts
 ```
+
+## Backup restore (Я НЕ ЗНАЮ КАК ПЕРЕНАСТРОИТЬ ВСЕ В SUPABASE С НУЛЯ Я ЗАБЫЛ ЗАПИСАТЬ КАК ЭТО ДЕЛАТЬ Я ТУПОРЫЛЫЙ `*******`)
+
+```bash
+.\postgresql-17.4-1-windows-x64-binaries\pgsql\bin\psql.exe -d "postgresql://postgres.PROJIDDDDDDDDDDD:DBPASSSSSSSSSSS@aws-0-us-east-2.pooler.supabase.com:5432/postgres" -f ".\db_cluster-18-12-2023@00-21-38.backup"
+```

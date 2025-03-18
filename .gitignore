@@ -26,3 +26,6 @@ coverage
 *.sw?
 
 .env
+postgresql-17.4-1-windows-x64-binaries
+db_cluster*
+*.backup
